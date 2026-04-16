@@ -1,0 +1,40 @@
+{
+  "summary": "The README presents the repo as a calm, exploratory utility while quietly using some of the same rhetorical simplifications it is designed to detect. Its main strategy is to turn a vague annoyance about AI-shaped social writing into a neat, inspectable framework with practical artifacts.",
+  "detected_patterns": [
+    {
+      "tag_name": "PAS",
+      "confidence": "high",
+      "where": "When you ask an AI to write a \"good LinkedIn post,\" the result often feels familiar for a reason... So instead of arguing about whether that is good or bad, this repo tries to make those patterns visible.",
+      "effect": "It structures the README around problem recognition, diagnosis, and a concrete response."
+    },
+    {
+      "tag_name": "SAFE_CONTRARIANISM",
+      "confidence": "medium",
+      "where": "A lot of what people call \"AI LinkedIn voice\" does not feel new.",
+      "effect": "It gives the README a slightly corrective stance without taking on meaningful reputational risk."
+    },
+    {
+      "tag_name": "MORAL_COMPRESSION",
+      "confidence": "medium",
+      "where": "The problem is not noticing when they are doing the heavy lifting for you.",
+      "effect": "It condenses a nuanced authorship-and-rhetoric issue into a memorable takeaway."
+    },
+    {
+      "tag_name": "CURIOSITY_GAP",
+      "confidence": "low",
+      "where": "This started as a simple observation:",
+      "effect": "It creates a small open loop before delivering the core claim."
+    },
+    {
+      "tag_name": "PARASOCIAL_MENTOR",
+      "confidence": "low",
+      "where": "If that section comes back thin, that usually tells you something useful.",
+      "effect": "It gently places the writer in the role of a guide helping the reader interpret results."
+    }
+  ],
+  "substance_extraction": "The repo provides a prompt file and a taxonomy file for inspecting rhetorical structure in AI-assisted social posts. It is intended for manual analysis or structured LLM evaluation workflows, and explicitly disclaims use as an authorship detector or moral purity test.",
+  "rhetorical_fingerprint": "PAS + Safe contrarianism + Moral compression, light Curiosity gap → Substance: high",
+  "rhetorical_density_score": "medium",
+  "substance_density": "high",
+  "one_thing_to_consider": "The explanatory arc is clear and useful, but it also compresses a messy cultural pattern into a tidy framework, which can make the mirror feel more definitive than it really is."
+}

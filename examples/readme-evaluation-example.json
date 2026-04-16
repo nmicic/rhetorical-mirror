@@ -1,0 +1,17 @@
+{
+  "summary": "The README is mostly direct and personal. It frames the repo as a self-editing guardrail for keeping AI-assisted drafts closer to the author's actual voice, while explicitly warning against confusing rhetorical density with factual correctness.",
+  "detected_patterns": [
+    {
+      "tag_name": "MORAL_COMPRESSION",
+      "confidence": "low",
+      "where": "The score is about packaging, not factual correctness.",
+      "effect": "It compresses a nuanced relationship between rhetoric and truth into a short, portable rule."
+    }
+  ],
+  "substance_extraction": "The repo provides a prompt and a high-level taxonomy for reviewing drafts and rewriting them toward lower rhetorical density and less AI-shaped self-promotion. It is intended as a self-editing aid, not as a detector of authorship, truth, or intent.",
+  "substance_check": "The README contains a real substantive claim: the repo is a self-editing aid for reducing AI-shaped voice drift. The content is not thin, even though the framing stays intentionally compact.",
+  "rhetorical_fingerprint": "No dominant framework + No dominant trope + Light moral compression → Substance: high",
+  "rhetorical_density_score": "low",
+  "substance_density": "high",
+  "one_thing_to_consider": "The README is intentionally plain, but even a careful warning can sound more absolute than the judgment behind it really is."
+}

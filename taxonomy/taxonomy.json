@@ -1,0 +1,518 @@
+{
+  "meta": {
+    "name": "Rhetorical Mirror — Social Content Taxonomy",
+    "version": "0.2.2",
+    "description": "A high-level classification system for detecting persuasion frameworks, narrative tropes, persuasion techniques, rhetorical devices, logical fallacies, cognitive biases, and platform or pressure tactics in posts, emails, and AI-assisted social writing.",
+    "copyright": "Copyright 2026 Nenad Micic",
+    "license": "Apache-2.0",
+    "usage": "Feed this taxonomy to any LLM alongside target text. The model can tag which patterns are present, estimate confidence, extract the substantive content underneath, and help rewrite a draft toward lower rhetorical density. The taxonomy is intentionally high-level rather than exhaustive.",
+    "scoring_guidance": {
+      "low": "Mostly direct and factual. Few visible persuasion frameworks, bias hooks, fallacies, or platform tactics.",
+      "medium": "Some rhetorical packaging is present, but substance still carries the draft.",
+      "high": "Persuasion frameworks, techniques, tropes, fallacies, bias hooks, or platform tactics are doing much of the persuasive work."
+    }
+  },
+
+  "layers": {
+
+    "persuasion_frameworks": {
+      "description": "Foundational marketing and copywriting structures designed to move readers toward a specific action. These are the engine of the post — they shape the entire arc from opening to close.",
+      "tags": {
+        "PAS": {
+          "full_name": "Problem–Agitate–Solve",
+          "origin": "Direct-response copywriting, popularized by Dan Kennedy",
+          "mechanism": "Identifies a pain point, amplifies the emotional weight of that pain, then presents the author (or their product/method) as the resolution.",
+          "detection_signals": [
+            "Opens with a frustration, cost, or failure the audience recognizes",
+            "Middle section deepens the problem — consequences, wasted time/money, emotional toll",
+            "Final section pivots to a method, tool, mindset, or offer framed as the fix",
+            "The 'solve' is almost always something the author sells, teaches, or embodies"
+          ],
+          "example_skeleton": "'I wasted $15K on X. Here is what nobody tells you about the real cost. After months of pain, I built a system that...'",
+          "not_this": "Genuinely sharing a mistake without pivoting to self-promotion or a product"
+        },
+        "AIDA": {
+          "full_name": "Attention–Interest–Desire–Action",
+          "origin": "Elias St. Elmo Lewis, 1898 — the oldest documented sales funnel",
+          "mechanism": "Grabs attention with a hook, builds intellectual interest, converts interest into emotional desire, then directs toward a specific action (DM, link, subscribe).",
+          "detection_signals": [
+            "Strong opening line engineered to stop the scroll",
+            "Body builds a case that makes the reader want something",
+            "Emotional or aspirational language escalates toward the end",
+            "Closes with a clear directive: DM me, grab the link, comment below"
+          ],
+          "example_skeleton": "'Most developers are mass applying and getting ignored. [Interest build-up about what works instead.] If you want my proven email template, drop TEMPLATE in the comments.'",
+          "not_this": "Sharing useful information that ends with an invitation to discuss"
+        },
+        "HSO": {
+          "full_name": "Hook–Story–Offer",
+          "origin": "Russell Brunson / ClickFunnels ecosystem",
+          "mechanism": "Opens with an attention-grabbing hook, transitions into a relatable personal narrative that builds authority, then drops a pitch or call-to-action at the end.",
+          "detection_signals": [
+            "First 1-2 lines are deliberately provocative or curiosity-inducing",
+            "Middle section tells a personal story — struggle, realization, transformation",
+            "Story conveniently leads to exactly the product/service/framework being sold",
+            "The offer may be soft ('DM me') or hard ('link in comments')"
+          ],
+          "example_skeleton": "'I almost quit tech last year. [Story of burnout and recovery.] That experience is why I built [product] — grab it free this week.'",
+          "not_this": "Telling a genuine story that happens to mention what you work on"
+        }
+      }
+    },
+
+    "narrative_tropes": {
+      "description": "Character archetypes and storytelling patterns the author uses to position themselves. These determine *who* the author pretends to be within the post's narrative.",
+      "tags": {
+        "PERFORMATIVE_VULNERABILITY": {
+          "full_name": "Performative vulnerability / Redemption arc",
+          "mechanism": "Sharing a carefully curated failure or struggle, not for its own sake, but as the first act of a success story. The failure is never unresolved — it always lands on a win, a lesson, or a credential.",
+          "detection_signals": [
+            "Opens with a confession of failure, rejection, or hardship",
+            "The failure is specific enough to feel authentic but sanitized of real mess",
+            "A pivot point ('but then I realized...') redirects to growth or success",
+            "The net effect is that the author looks *better* for having failed",
+            "Real vulnerability would include doubt, ambiguity, or unresolved outcomes — this doesn't"
+          ],
+          "example_skeleton": "'I got rejected from 47 jobs. It was the best thing that ever happened to me. Here is what I learned...'",
+          "not_this": "Sharing a failure that is still unresolved, still painful, or that doesn't serve the author's brand"
+        },
+        "CONTRARIAN_HUMBLEBRAG": {
+          "full_name": "Contrarian humblebrag",
+          "mechanism": "Disguising a flex as a controversial opinion or a reluctant admission. The author feigns hesitation or self-deprecation while ensuring the reader registers their achievement.",
+          "detection_signals": [
+            "Phrases like 'unpopular opinion,' 'this might be controversial,' 'I hesitated to share this'",
+            "The 'controversial' opinion is actually safe and widely agreeable",
+            "Apparent modesty that requires the reader to infer impressive credentials",
+            "Self-deprecation that only works if the audience knows how successful the author is"
+          ],
+          "example_skeleton": "'Unpopular opinion: your CS degree doesn't matter. (I say this as someone who dropped out and now leads engineering at...)'",
+          "not_this": "An actually controversial opinion that risks the author's reputation"
+        },
+        "PARASOCIAL_MENTOR": {
+          "full_name": "Parasocial mentor",
+          "mechanism": "Addressing the audience as if a personal coaching relationship exists. The author positions themselves as a wise guide dispensing life advice to followers who never asked for it.",
+          "detection_signals": [
+            "Direct second-person address with life advice framing: 'you need to,' 'stop doing X'",
+            "Phrases like 'here is what I would tell my younger self' or 'what I wish someone told me'",
+            "Authoritative tone without establishing why the author is qualified on this topic",
+            "Creates an implied hierarchy: author = wise mentor, reader = student"
+          ],
+          "example_skeleton": "'You do not need another course. You need to ship. Here are the 5 things I wish someone told me at 25...'",
+          "not_this": "Genuinely answering a question someone asked, or sharing expertise in context"
+        },
+        "RELUCTANT_EXPERT": {
+          "full_name": "Reluctant expert",
+          "mechanism": "Performs modesty or hesitation before sharing advice, which makes the authority claim feel more authentic and less self-promotional.",
+          "detection_signals": [
+            "Phrases like 'I do not usually share this' or 'I almost did not post this'",
+            "A modest or reluctant opening that increases trust",
+            "Hesitation framing used as a prelude to expertise or instruction",
+            "The reluctance itself becomes a credibility device"
+          ],
+          "example_skeleton": "'I do not usually write threads like this, but after seeing the same mistake again and again, here is what I would tell founders...'",
+          "not_this": "A simple note of uncertainty that does not function as an authority move"
+        },
+        "OUTSIDER_VALIDATION": {
+          "full_name": "Outsider validation",
+          "mechanism": "Borrows legitimacy from a client, mentor, investor, or outside observer instead of establishing the claim directly.",
+          "detection_signals": [
+            "The message leans on what someone else said about the author or their work",
+            "Validation comes from an external party rather than evidence",
+            "Named outside approval appears early and shapes the reader's stance",
+            "The borrowed endorsement does more work than the underlying substance"
+          ],
+          "example_skeleton": "'A client told me last week that this was the clearest system they had seen, which made me realize...'",
+          "not_this": "A relevant testimonial used with context and without standing in for the whole argument"
+        },
+        "PIVOT_NARRATIVE": {
+          "full_name": "Pivot narrative",
+          "mechanism": "Builds authority through a before-and-after belief shift: I used to think X, now I know Y.",
+          "detection_signals": [
+            "A clean reversal from old belief to new belief",
+            "Personal transformation used as proof of insight",
+            "The pivot itself is emphasized more than the evidence behind it",
+            "The change in view is narrated as a lesson arc"
+          ],
+          "example_skeleton": "'I used to think speed mattered most. Now I think clarity matters more than speed.'",
+          "not_this": "A belief update that is carefully supported and not used as the main authority signal"
+        },
+        "STORYSELLING": {
+          "full_name": "Storyselling",
+          "mechanism": "Disguising a product pitch or lead-generation funnel as a personal diary entry or authentic moment of reflection.",
+          "detection_signals": [
+            "Reads like a personal anecdote but the moral conveniently aligns with the author's offering",
+            "Emotional narrative arc that ends at a product, service, or funnel entry point",
+            "The 'story' would not exist without the commercial intent behind it",
+            "Often uses present tense or 'just happened' framing to feel spontaneous"
+          ],
+          "example_skeleton": "'My daughter asked me why I work so much. That conversation changed everything. It is why I built a system to [product pitch]...'",
+          "not_this": "Talking about your work in a way that naturally mentions what you do"
+        }
+      }
+    },
+
+    "persuasion_techniques": {
+      "description": "Common persuasive moves used to make a claim feel urgent, credible, emotional, or socially validated. These sit between broad frameworks and sentence-level phrasing.",
+      "tags": {
+        "LOADED_LANGUAGE": {
+          "full_name": "Loaded language",
+          "mechanism": "Uses emotionally charged wording to push the reader toward a judgment before the argument has fully earned it.",
+          "detection_signals": [
+            "Emotionally heavy words where neutral wording would be possible",
+            "Hero-villain framing or moral labeling doing more work than evidence",
+            "Adjectives chosen to intensify reaction rather than clarify facts",
+            "Language that makes disagreement feel suspect before the case is made"
+          ],
+          "example_skeleton": "'This broken, outdated approach is killing your growth.'",
+          "not_this": "Strong wording that is proportionate to clearly supported facts"
+        },
+        "APPEAL_TO_AUTHORITY": {
+          "full_name": "Appeal to authority",
+          "mechanism": "Borrows credibility from titles, institutions, or well-known names instead of building the case mainly on the merits.",
+          "detection_signals": [
+            "Credential-first persuasion: experts, founders, leaders, professors",
+            "Institutional prestige used as a substitute for explanation",
+            "Named authority invoked without showing why their view settles the matter",
+            "Brand or title doing more persuasive work than evidence"
+          ],
+          "example_skeleton": "'Three Fortune 500 leaders use this method, so it is the right way to hire.'",
+          "not_this": "Citing relevant expertise while also presenting evidence, limits, and reasoning"
+        },
+        "APPEAL_TO_FEAR": {
+          "full_name": "Appeal to fear",
+          "mechanism": "Pushes action by emphasizing threat, loss, or downside more heavily than the underlying reasoning warrants.",
+          "detection_signals": [
+            "Warnings designed to trigger avoidance or panic",
+            "Phrases like 'if you keep doing this' tied to severe negative outcomes",
+            "Loss-heavy framing with little calibration or nuance",
+            "Urgency built primarily on fear of falling behind or getting hurt"
+          ],
+          "example_skeleton": "'If you keep writing posts this way, your audience will disappear.'",
+          "not_this": "Explaining a real risk in proportion to the evidence"
+        },
+        "SOCIAL_PROOF": {
+          "full_name": "Social proof",
+          "mechanism": "Uses crowd behavior or peer adoption to imply that something is correct, desirable, or safe.",
+          "detection_signals": [
+            "Claims that many people, teams, or creators already do this",
+            "Popularity positioned as a reason to comply",
+            "Peer adoption used to reduce the need for direct argument",
+            "Reader nudged to conform because others supposedly already have"
+          ],
+          "example_skeleton": "'More than 10,000 founders have already switched to this approach.'",
+          "not_this": "Relevant adoption data that supports but does not replace the main argument"
+        }
+      }
+    },
+
+    "rhetorical_devices": {
+      "description": "Linguistic tricks and structural patterns that make the persuasion feel invisible. These are the connective tissue — they hold the frameworks and tropes together.",
+      "tags": {
+        "CURIOSITY_GAP": {
+          "full_name": "Curiosity gap / Open loop",
+          "mechanism": "Withholding a key piece of information to force the reader past the fold ('See more' button) or to keep reading.",
+          "detection_signals": [
+            "Phrases like 'here is why,' 'let me explain,' 'but there is a catch,' 'what happened next changed everything'",
+            "The first 2-3 lines promise a revelation that is delayed",
+            "Information that could be stated upfront is deliberately withheld for dramatic effect",
+            "Often placed right before the LinkedIn 'See more' truncation point"
+          ]
+        },
+        "SPECIFICITY_THEATER": {
+          "full_name": "Specificity theater",
+          "mechanism": "Using highly specific numbers, timelines, or metrics to create an aura of credibility, even when the specifics are not central to the point.",
+          "detection_signals": [
+            "Suspiciously round or dramatic numbers: '$147K mistake,' '10,000 hours,' '47 rejections'",
+            "Metrics that sound precise but are unverifiable",
+            "Numbers used primarily for emotional impact rather than informational value",
+            "Removing the specific number would not change the actual lesson"
+          ]
+        },
+        "MORAL_COMPRESSION": {
+          "full_name": "Moral compression",
+          "mechanism": "Reducing a complex, nuanced situation into a clean, portable lesson or aphorism. The messiness that makes real experience valuable is stripped out in favor of shareability.",
+          "detection_signals": [
+            "Complex situations reduced to a single 'takeaway'",
+            "Phrases like 'the lesson is simple' applied to things that are not simple",
+            "Real tradeoffs, context-dependence, or ambiguity are erased",
+            "The 'insight' could apply to almost anything — it is not specific to the situation described"
+          ]
+        },
+        "SAFE_CONTRARIANISM": {
+          "full_name": "Safe contrarianism",
+          "mechanism": "Presenting an opinion as bold or controversial when it is actually widely agreeable, especially to the target audience.",
+          "detection_signals": [
+            "Framed as 'unpopular opinion' or 'hot take' or 'this might get me in trouble'",
+            "The opinion would be enthusiastically agreed with by 80%+ of the author's audience",
+            "No actual professional or reputational risk to stating it",
+            "The 'controversy' is against a vague out-group (recruiters, corporations, academia) rather than the author's own tribe"
+          ]
+        },
+        "SEMANTIC_HEDGING": {
+          "full_name": "Semantic hedging",
+          "mechanism": "Uses soft qualifiers to make a claim feel safer, harder to challenge, or more defensible without really clarifying it.",
+          "detection_signals": [
+            "Heavy use of words like 'might,' 'could,' 'some would say,' or 'in many cases'",
+            "Claim is softened just enough to become slippery",
+            "Hedging reduces accountability more than it adds precision",
+            "The wording makes a weak claim hard to falsify"
+          ]
+        },
+        "CALLBACK_CLOSURE": {
+          "full_name": "Callback closure",
+          "mechanism": "Returns to an opening image, phrase, or scene at the end to create emotional neatness and a stronger sense of resolution.",
+          "detection_signals": [
+            "An opening motif reappears near the ending",
+            "The closing line echoes the beginning for rhetorical neatness",
+            "Structure creates a satisfying loop around a thin core idea",
+            "The symmetry makes the draft feel more complete than the substance alone would"
+          ]
+        },
+        "RULE_OF_THREE_PADDING": {
+          "full_name": "Rule-of-three padding",
+          "mechanism": "Uses a polished three-part list or tricolon to make a simple point feel fuller, more memorable, or more complete than it really is.",
+          "detection_signals": [
+            "Three-part phrasing used for cadence more than clarity",
+            "Tidy triples like 'clarity, consistency, courage'",
+            "List structure adds rhetorical weight to a thin idea",
+            "The symmetry is memorable even when the content is light"
+          ]
+        }
+      }
+    },
+
+    "logical_fallacies": {
+      "description": "Reasoning shortcuts that make an argument feel cleaner, stronger, or simpler than it really is. These matter when the structure of the claim distorts the substance.",
+      "tags": {
+        "FALSE_DILEMMA": {
+          "full_name": "False dilemma",
+          "mechanism": "Presents two options as if they are the only possibilities, even when the real situation allows more nuance or middle ground.",
+          "detection_signals": [
+            "Binary framing: either X or Y",
+            "Complex issue reduced to a forced choice",
+            "Missing middle positions, tradeoffs, or alternatives",
+            "Language that treats one preferred option as the only sane one"
+          ],
+          "example_skeleton": "'Either you build a personal brand or you become invisible.'",
+          "not_this": "A real two-option constraint where alternatives are genuinely absent"
+        },
+        "HASTY_GENERALIZATION": {
+          "full_name": "Hasty generalization",
+          "mechanism": "Draws a broad conclusion from a small sample, a few anecdotes, or a narrow personal experience.",
+          "detection_signals": [
+            "Big rule inferred from one or two examples",
+            "Personal anecdote treated as universal evidence",
+            "Claims about 'people,' 'customers,' or 'the market' with little support",
+            "A small pattern stretched into a general law"
+          ],
+          "example_skeleton": "'I sent two cold emails and both failed, so cold email is dead.'",
+          "not_this": "A tentative observation that clearly states its limits"
+        },
+        "CAUSAL_OVERSIMPLIFICATION": {
+          "full_name": "Causal oversimplification",
+          "mechanism": "Explains a complex result with one tidy cause, removing competing explanations and real-world messiness.",
+          "detection_signals": [
+            "Single-cause explanation for a multi-factor outcome",
+            "Clean 'the reason is simple' framing on a messy topic",
+            "Ignored context, incentives, timing, or second-order effects",
+            "Cause-and-effect language that feels too neat for the situation"
+          ],
+          "example_skeleton": "'This product failed because the founder did not post on LinkedIn enough.'",
+          "not_this": "A focused causal claim that acknowledges limits and other contributing factors"
+        },
+        "CHERRY_PICKING": {
+          "full_name": "Cherry-picking",
+          "mechanism": "Selects only the examples, metrics, or facts that support the preferred conclusion while leaving out the balancing evidence.",
+          "detection_signals": [
+            "Only favorable examples are highlighted",
+            "Metrics shown without the surrounding context",
+            "Counterexamples or caveats quietly disappear",
+            "The chosen evidence feels curated to prove a point rather than test it"
+          ],
+          "example_skeleton": "'These three viral posts prove this strategy always works.'",
+          "not_this": "Selective examples that are clearly labeled as illustrative rather than decisive"
+        }
+      }
+    },
+
+    "cognitive_biases": {
+      "description": "Audience-level judgment shortcuts that persuasive writing often leans on. These are not always deliberate, but they help explain why some framing lands so easily.",
+      "tags": {
+        "CONFIRMATION_BIAS": {
+          "full_name": "Confirmation bias",
+          "mechanism": "Leans into what the audience already believes or wants to believe, making agreement feel natural and frictionless.",
+          "detection_signals": [
+            "Flatters the reader's prior worldview",
+            "Frames an existing belief as newly validated",
+            "Uses familiar grievances or assumptions as the foundation",
+            "Presents agreement as obvious because the audience already leans that way"
+          ],
+          "example_skeleton": "'Deep down, you already know most career advice online is fake.'",
+          "not_this": "Meeting the reader where they are while still challenging weak assumptions"
+        },
+        "LOSS_AVERSION": {
+          "full_name": "Loss aversion",
+          "mechanism": "Makes potential losses feel heavier and more motivating than equivalent gains.",
+          "detection_signals": [
+            "Emphasis on what the reader will lose by not acting",
+            "Downside language outweighs upside language",
+            "Risk of missing out framed as more important than possible benefit",
+            "Reader pushed by fear of decline rather than interest in improvement"
+          ],
+          "example_skeleton": "'If you ignore this now, you will keep wasting months and momentum.'",
+          "not_this": "Balanced discussion of costs and benefits"
+        },
+        "HALO_EFFECT": {
+          "full_name": "Halo effect",
+          "mechanism": "Lets one admired trait, credential, or success spill over and make unrelated claims feel more credible.",
+          "detection_signals": [
+            "One success or credential used to support a broader claim",
+            "Admiration for the speaker carries the argument",
+            "Readers are nudged to trust the message because the messenger seems impressive",
+            "Status or charisma substitutes for topic-specific support"
+          ],
+          "example_skeleton": "'She built a unicorn, so her framework for writing cold emails must be right.'",
+          "not_this": "Relevant expertise used carefully and within scope"
+        },
+        "ANCHORING": {
+          "full_name": "Anchoring",
+          "mechanism": "Makes the first number, frame, or comparison point do disproportionate work in shaping later judgment.",
+          "detection_signals": [
+            "A big first number or baseline sets expectations",
+            "Opening comparison point makes the rest seem reasonable",
+            "Early framing narrows what feels normal or acceptable",
+            "The first claim keeps influencing the reader even when later nuance appears"
+          ],
+          "example_skeleton": "'Most teams waste six figures on this before they realize the simple fix.'",
+          "not_this": "Using a starting reference point that is clearly contextualized and not over-weighted"
+        }
+      }
+    },
+
+    "platform_tactics": {
+      "description": "Formatting, engagement, and pressure patterns designed to exploit feed behavior, inbox dynamics, or conversion psychology. These are not just about what the draft says — they are also about how it is packaged to trigger action.",
+      "tags": {
+        "BROETRY": {
+          "full_name": "Broetry / Algorithm-aware formatting",
+          "mechanism": "One sentence per line, heavy use of white space, designed to increase vertical scroll distance and dwell time — metrics most social platform algorithms reward.",
+          "detection_signals": [
+            "One sentence (or sentence fragment) per line",
+            "Excessive line breaks between thoughts that could be a normal paragraph",
+            "Short, punchy lines that read like dramatic pauses",
+            "The formatting would look absurd in any context other than a social feed"
+          ]
+        },
+        "ENGAGEMENT_FARMING": {
+          "full_name": "Engagement farming",
+          "mechanism": "Appending a generic question or call for interaction solely to trigger comments, which boosts algorithmic distribution.",
+          "detection_signals": [
+            "Question at the end that is loosely connected (or unconnected) to the post's content",
+            "Broad questions designed to be easy to answer: 'What is your biggest challenge?', 'Agree?'",
+            "The question does not reflect genuine curiosity — the author is unlikely to read the answers",
+            "Phrases like 'drop a [emoji] if you agree', 'tag someone who needs this'"
+          ]
+        },
+        "DISGUISED_CTA": {
+          "full_name": "Disguised call-to-action",
+          "mechanism": "Embedding a lead-generation or sales action inside language that sounds like peer conversation rather than marketing.",
+          "detection_signals": [
+            "Phrases like 'DM me [keyword]' or 'comment [word] and I will send you...'",
+            "Offers framed as personal favors: 'I put together a free guide, happy to share'",
+            "The 'generosity' routes to an email list, sales funnel, or consultation booking",
+            "What sounds like sharing is actually a conversion mechanism"
+          ]
+        },
+        "FAKE_SCARCITY": {
+          "full_name": "Fake scarcity",
+          "mechanism": "Creates pressure by implying limited supply, access, or opportunity when the limitation is weak, artificial, or unverifiable.",
+          "detection_signals": [
+            "Claims like 'only a few spots left' without context",
+            "Scarcity framing that cannot be checked",
+            "Availability pressure doing more work than the actual offer",
+            "The message wants urgency because something seems rare rather than useful"
+          ]
+        },
+        "ARTIFICIAL_URGENCY": {
+          "full_name": "Artificial urgency",
+          "mechanism": "Pushes immediate action through countdown-style time pressure that feels manufactured rather than genuinely necessary.",
+          "detection_signals": [
+            "Last chance, today only, final hours, closing tonight",
+            "Time pressure with no clear reason behind the deadline",
+            "Urgency language used to suppress reflection",
+            "The reader is pushed to act now rather than think clearly"
+          ]
+        },
+        "CONFIRMSHAMING": {
+          "full_name": "Confirmshaming",
+          "mechanism": "Frames non-compliance as laziness, ignorance, or self-sabotage so that saying no feels embarrassing.",
+          "detection_signals": [
+            "Declining is framed as a failure of ambition or intelligence",
+            "The negative option is worded to make the reader feel small",
+            "Opting out is treated as an admission of weakness",
+            "Social discomfort is used as conversion pressure"
+          ]
+        },
+        "FAKE_PERSONALIZATION": {
+          "full_name": "Fake personalization",
+          "mechanism": "Uses a personalized-sounding opener to create warmth or relevance before moving into a generic or templated pitch.",
+          "detection_signals": [
+            "Opens with 'came across your work' or a similar soft compliment",
+            "The personalized line is vague and could fit many recipients",
+            "The message quickly pivots into a generic ask or pitch",
+            "Apparent familiarity does more work than actual relevance"
+          ]
+        },
+        "NAMEDROP_OPENER": {
+          "full_name": "Namedrop opener",
+          "mechanism": "Leads with a prestigious person, company, investor, or shared contact to borrow credibility before the real message begins.",
+          "detection_signals": [
+            "Opening line mentions a notable person, company, or shared connection",
+            "Prestige appears before the core point is made",
+            "The namedrop is used to soften skepticism or speed trust",
+            "The borrowed association feels more important than the actual ask"
+          ]
+        },
+        "REPLY_CHAIN_DECEPTION": {
+          "full_name": "Reply-chain deception",
+          "mechanism": "Formats a cold message so it looks like part of an existing thread or prior relationship, lowering the reader's defenses.",
+          "detection_signals": [
+            "Subject or opener implies a prior exchange that did not happen",
+            "Message is formatted to resemble an ongoing thread",
+            "The draft tries to create false familiarity through continuity cues",
+            "Reader is nudged to treat a cold message as already-established context"
+          ]
+        },
+        "GRATITUDE_THEATER": {
+          "full_name": "Gratitude theater",
+          "mechanism": "Uses public thanks, shoutouts, or appreciation language partly as a visibility or engagement move rather than mainly as genuine acknowledgment.",
+          "detection_signals": [
+            "Thanks or praise feels performative or strategically public",
+            "The gratitude section mainly boosts visibility, affiliation, or social proof",
+            "Named appreciation sits awkwardly close to self-positioning",
+            "The acknowledgment does more platform work than relational work"
+          ]
+        },
+        "NEWSLETTER_BAIT": {
+          "full_name": "Newsletter bait",
+          "mechanism": "Ends otherwise unrelated content with a repeated subscription nudge that turns the whole draft toward list growth.",
+          "detection_signals": [
+            "Post closes with a newsletter or subscribe push regardless of topic fit",
+            "The main content feels partially instrumental to list growth",
+            "A recurring opt-in prompt appears as standard packaging",
+            "Subscription language arrives even when the draft would stand fine without it"
+          ]
+        },
+        "TRANSFORMATION_SNAPSHOT": {
+          "full_name": "Transformation snapshot",
+          "mechanism": "Compresses a long, messy process into a simple before-and-after frame to make change look clean, fast, and highly legible.",
+          "detection_signals": [
+            "Before/after framing removes the messy middle",
+            "A process is flattened into two tidy states",
+            "Transformation is shown as a snapshot rather than a gradual path",
+            "The clean contrast makes the outcome feel more dramatic and portable"
+          ]
+        }
+      }
+    }
+  }
+}
