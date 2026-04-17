@@ -1,0 +1,11 @@
+title: Rhetorical Mirror
+description: A small prompt-and-taxonomy repo for reducing AI-shaped voice drift in drafts.
+theme: jekyll-theme-cayman
+
+# Exclude non-doc directories from the generated site.
+exclude:
+  - src/
+  - examples/
+  - taxonomy/
+  - .github/
+  - .gitignore
